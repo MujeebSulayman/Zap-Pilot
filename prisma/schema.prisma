@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile            Profile?
+  wallet             ManagedWallet?
+  fundingSources     FundingSource[]
+  fiatDeposits       FiatDeposit[]
+  stablecoinDeposits StablecoinDeposit[]
+  activityLogs       ActivityLog[]
+  transactions       TransactionHistory[]
+  simulations        SimulationHistory[]
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currency  String   @default("NGN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ManagedWallet {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  address          String   @unique
+  provider         String   @default("Blockradar")
+  providerWalletId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model FundingSource {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // e.g. "BANK_ACCOUNT"
+  name      String
+  details   String   // Could be encrypted or store partial info
+  createdAt DateTime @default(now())
+}
+
+model FiatDeposit {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount    Float
+  currency  String   @default("NGN")
+  status    String   // "PENDING", "COMPLETED", "FAILED"
+  reference String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StablecoinDeposit {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String
+  amount    Float
+  chain     String
+  txHash    String?  @unique
+  status    String   // "PENDING", "COMPLETED", "FAILED"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VaultPositionCache {
+  id            String   @id @default(uuid())
+  walletAddress String
+  vaultAddress  String
+  chainId       Int
+  balance       Float
+  valueUsd      Float
+  updatedAt     DateTime @updatedAt
+
+  @@unique([walletAddress, vaultAddress, chainId])
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}
+
+model TransactionHistory {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         String   // "DEPOSIT", "WITHDRAW", "SWAP"
+  vaultAddress String?
+  amount       Float
+  status       String
+  txHash       String?
+  createdAt    DateTime @default(now())
+}
+
+model SimulationHistory {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  depositAmount  Float
+  durationMonths Int
+  projectedValue Float
+  createdAt      DateTime @default(now())
+}

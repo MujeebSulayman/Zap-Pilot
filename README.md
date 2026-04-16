@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zap Pilot ⚡
 
-## Getting Started
+An automated yield application designed to remove crypto complexity and enable users to instantly move fiat from local bank accounts into decentralized yield strategies. Powered by **LI.FI Earn** and **LI.FI Composer**.
 
-First, run the development server:
+## Product Vision
+- **No Crypto Knowledge Required**: Abstracted wallet provisioning and gasless transactions.
+- **Direct NGN On-Ramp**: Deposit securely using stable local bank infrastructure.
+- **Top Markets**: Browse LI.FI's curated index of the highest-yielding DeFi protocols.
+- **Track & Withdraw**: Real-time portfolio syncing through LI.FI Earn's indexers.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tech Stack
+- Frontend: Next.js (App Router), TailwindCSS, Zustand, React Query
+- Backend: Next.js API Routes (Serverless), Prisma ORM, Node.js
+- Database: PostgreSQL
+- Integrations: LI.FI Earn API, Composer, Managed Wallet Abstractions
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Setup Instructions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone and Install**
+   ```bash
+   git clone <repository>
+   cd ZapPilot
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Environment Variables**
+   Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   *Note: Ensure your `DATABASE_URL` points to an active PostgreSQL database instance. You can run one via Docker or use a service like Supabase.*
 
-## Learn More
+3. **Database Configuration**
+   Initialize the database schema:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+   *(Or run `npx prisma migrate dev` if extending migrations.)*
 
-To learn more about Next.js, take a look at the following resources:
+4. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
+   The app will be available at [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## LI.FI Integration Setup (Important)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+In `services/lifi.service.ts`, we interface directly with `https://li.quest/v1`. 
+- Valid `LIFI_API_KEY` is supported but not strictly required for local dev of free endpoints. Add it to `.env` if you experience rate limits.
+- The Composer Quote generation uses the `vault.address` correctly as the `toToken` in deposits.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Enjoy auto-yielding without the friction! 🚀
