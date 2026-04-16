@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   ArrowRight, 
@@ -9,7 +9,10 @@ import {
   ShieldCheck, 
   Unlock,
   UserPlus,
-  ArrowUpRight
+  ArrowUpRight,
+  User,
+  Mail,
+  Lock
 } from 'lucide-react'
 import { useAuthStore, AuthState } from '@/store/useAuthStore'
 
@@ -17,21 +20,21 @@ const FEATURES = [
   {
     title: "Instant NGN On-Ramp",
     description: "Simplified liquidity for the Nigerian market. Connect your bank and move NGN directly to yields.",
-    icon: <Wallet className="w-5 h-5 text-slate-600" />
+    icon: <Wallet className="w-5 h-5 text-slate-300" />
   },
   {
     title: "Global Yield Protocols",
     description: "Institutional-grade access to Aave, Morpho, and Euler without the technical overhead.",
-    icon: <TrendingUp className="w-5 h-5 text-slate-600" />
+    icon: <TrendingUp className="w-5 h-5 text-slate-300" />
   },
   {
     title: "Managed Infrastructure",
     description: "Gasless transactions and dedicated wallets powered by the Blockradar network.",
-    icon: <ShieldCheck className="w-5 h-5 text-slate-600" />
+    icon: <ShieldCheck className="w-5 h-5 text-slate-300" />
   }
 ]
 
-export default function ProfessionalOnboardingPage() {
+export default function BalancedProfessionalPage() {
   const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup')
   const router = useRouter()
   const setUser = useAuthStore((state: AuthState) => state.setUser)
@@ -71,90 +74,95 @@ export default function ProfessionalOnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-white">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-950">
       
-      {/* LEFT SIDE: Auth Form (Desktop: 45%, Mobile: Full) */}
-      <div className="lg:w-[45%] flex flex-col justify-center items-center p-8 lg:p-24 border-r border-slate-100">
-        <div className="w-full max-w-[400px]">
-          <div className="mb-12">
-            <div className="flex items-center gap-2 mb-10">
-              <div className="w-8 h-8 bg-slate-900 rounded flex items-center justify-center text-white font-bold text-lg">
+      {/* LEFT SIDE: Auth Form (50%) */}
+      <div className="lg:w-1/2 flex flex-col justify-center items-center p-8 lg:p-12 border-r border-slate-900 bg-slate-950">
+        <div className="w-full max-w-[420px]">
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-12">
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-slate-950 font-black text-xl">
                 Z
               </div>
-              <span className="text-xl font-bold text-slate-900 tracking-tight">Zap Pilot</span>
+              <span className="text-2xl font-black text-white tracking-tight italic uppercase">Zap Pilot</span>
             </div>
             
-            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">
-              {authMode === 'signup' ? 'Create an account' : 'Welcome back'}
+            <h2 className="text-4xl font-black text-white mb-2 tracking-tighter">
+              {authMode === 'signup' ? 'Ready for takeoff.' : 'Welcome back, Pilot.'}
             </h2>
-            <p className="text-slate-500 font-medium">
+            <p className="text-slate-500 font-medium text-lg">
               {authMode === 'signup' 
-                ? 'Join 5,000+ pilots building wealth on-chain.' 
-                : 'Enter your credentials to access your dashboard.'}
+                ? 'Join the high-yield revolution in under 2 minutes.' 
+                : 'Enter your credentials to manage your capital.'}
             </p>
           </div>
 
-          <div className="flex border-b border-slate-100 mb-8">
+          <div className="grid grid-cols-2 gap-2 p-1.5 bg-slate-900 rounded-xl mb-10 border border-slate-800">
             <button 
               onClick={() => { setAuthMode('signup'); setError('') }}
-              className={`pb-4 px-2 text-sm font-bold transition-all relative ${
-                authMode === 'signup' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'
+              className={`py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2 ${
+                authMode === 'signup' ? 'bg-slate-800 text-white shadow-lg' : 'text-slate-500 hover:text-slate-400'
               }`}
             >
-              Sign Up
-              {authMode === 'signup' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900" />}
+              <UserPlus className="w-4 h-4" /> Create Account
             </button>
             <button 
               onClick={() => { setAuthMode('login'); setError('') }}
-              className={`pb-4 px-6 text-sm font-bold transition-all relative ${
-                authMode === 'login' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'
+              className={`py-3 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2 ${
+                authMode === 'login' ? 'bg-slate-800 text-white shadow-lg' : 'text-slate-500 hover:text-slate-400'
               }`}
             >
-              Sign In
-              {authMode === 'login' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900" />}
+              <Unlock className="w-4 h-4" /> Sign In
             </button>
           </div>
 
           {error && (
-            <div className="bg-slate-50 text-slate-900 p-4 rounded border border-slate-200 mb-6 text-sm font-medium">
+            <div className="bg-red-500/10 text-red-500 p-4 rounded-xl border border-red-500/20 mb-8 text-sm font-semibold flex items-center gap-3">
+               <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
                {error}
             </div>
           )}
 
-          <form onSubmit={handleAuth} className="space-y-6">
+          <form onSubmit={handleAuth} className="space-y-5">
             {authMode === 'signup' && (
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors border-r border-slate-800 pr-4 my-3">
+                  <User className="w-4 h-4 text-slate-500 group-focus-within:text-emerald-500" />
+                </div>
                 <input 
                   type="text" 
                   required
-                  placeholder="Ebube James"
-                  className="w-full border border-slate-200 focus:border-slate-900 focus:ring-0 px-4 py-3 rounded outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300"
+                  placeholder="Full Name"
+                  className="w-full bg-slate-900/50 border border-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 pl-16 pr-4 py-4 rounded-xl outline-none transition-all font-semibold text-white placeholder:text-slate-600 sm:text-base text-sm"
                   value={name}
                   onChange={e => setName(e.target.value)}
                 />
               </div>
             )}
             
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Email Address</label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors border-r border-slate-800 pr-4 my-3">
+                <Mail className="w-4 h-4 text-slate-500 group-focus-within:text-emerald-500" />
+              </div>
               <input 
                 type="email" 
                 required
-                placeholder="ebube@example.com"
-                className="w-full border border-slate-200 focus:border-slate-900 focus:ring-0 px-4 py-3 rounded outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300"
+                placeholder="Email Address"
+                className="w-full bg-slate-900/50 border border-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 pl-16 pr-4 py-4 rounded-xl outline-none transition-all font-semibold text-white placeholder:text-slate-600 sm:text-base text-sm"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
             
-            <div className="space-y-2 pb-2">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Password</label>
+            <div className="relative group pb-2">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors border-r border-slate-800 pr-4 my-3">
+                <Lock className="w-4 h-4 text-slate-500 group-focus-within:text-emerald-500" />
+              </div>
               <input 
                 type="password" 
                 required
-                placeholder="••••••••"
-                className="w-full border border-slate-200 focus:border-slate-900 focus:ring-0 px-4 py-3 rounded outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300"
+                placeholder="Password"
+                className="w-full bg-slate-900/50 border border-slate-800 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 pl-16 pr-4 py-4 rounded-xl outline-none transition-all font-semibold text-white placeholder:text-slate-600 sm:text-base text-sm"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
               />
@@ -163,46 +171,47 @@ export default function ProfessionalOnboardingPage() {
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg shadow-xl shadow-emerald-500/10 group active:scale-[0.98]"
             >
-              {loading ? 'Processing...' : authMode === 'signup' ? 'Get Started' : 'Sign In'}
-              <ArrowRight className="w-4 h-4" />
+              {loading ? 'Authenticating...' : authMode === 'signup' ? 'Create Account' : 'Welcome Abroad'}
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
 
-          <p className="mt-8 text-slate-400 text-xs text-center lg:text-left">
-            By creating an account you agree to our <span className="text-slate-900 font-bold underline cursor-pointer">Terms</span> and <span className="text-slate-900 font-bold underline cursor-pointer">Privacy Policy</span>.
+          <p className="mt-10 text-slate-500 text-xs text-center font-medium leading-relaxed">
+            Protecting your assets is our top priority. By continuing you agree to the <span className="text-white font-bold hover:underline cursor-pointer">Terms of Service</span>.
           </p>
         </div>
       </div>
 
-      {/* RIGHT SIDE: Details & Value (Desktop: 55%, Mobile: Hidden/Top) */}
-      <div className="lg:w-[55%] bg-slate-50 flex flex-col justify-center p-12 lg:p-24">
-        <div className="max-w-xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-slate-200 text-slate-700 text-xs font-bold mb-8">
-            <span className="w-2 h-2 rounded-full bg-slate-900 animate-pulse" />
-            V0.4 NOW LIVE
+      {/* RIGHT SIDE: Details & Value (50%) */}
+      <div className="lg:w-1/2 bg-slate-900/40 flex flex-col justify-center p-8 lg:p-24">
+        <div className="max-w-xl mx-auto lg:mx-0">
+          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-black uppercase tracking-widest mb-10 border border-slate-700 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Mainnet Beta V0.4
           </div>
           
-          <h1 className="text-5xl lg:text-6xl font-black text-slate-900 leading-tight mb-8 tracking-tighter">
-            Automated capital management for Nigeria.
+          <h1 className="text-5xl lg:text-7xl font-black text-white leading-tight mb-8 tracking-tighter">
+            Capital growth, <br />
+            <span className="text-emerald-500">fully automated.</span>
           </h1>
-          <p className="text-lg text-slate-500 font-medium leading-relaxed mb-16">
-            Skip the complexity of DeFi. Move NGN into yield-bearing assets in seconds. High-end infrastructure designed for the modern pilot.
+          <p className="text-xl text-slate-400 font-medium leading-relaxed mb-16">
+            Institutional-grade yield infrastructure for the Nigerian market. Experience high-end tools designed specifically for the modern capital pilot.
           </p>
 
-          <div className="grid gap-10">
+          <div className="grid gap-14">
             {FEATURES.map((feature, idx) => (
-              <div key={idx} className="flex gap-6 group">
-                <div className="w-12 h-12 rounded bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-110">
+              <div key={idx} className="flex gap-8 group">
+                <div className="w-14 h-14 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0 shadow-lg transition-all group-hover:border-emerald-500/50 group-hover:translate-y-[-2px]">
                   {feature.icon}
                 </div>
                 <div className="flex flex-col justify-center">
-                  <h3 className="font-bold text-slate-900 mb-1 flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-white mb-1.5 flex items-center gap-2">
                     {feature.title}
-                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all text-slate-400" />
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all text-emerald-500" />
                   </h3>
-                  <p className="text-slate-500 text-sm leading-relaxed max-w-sm">
+                  <p className="text-slate-400 text-sm leading-relaxed max-w-sm font-medium">
                     {feature.description}
                   </p>
                 </div>
@@ -210,18 +219,18 @@ export default function ProfessionalOnboardingPage() {
             ))}
           </div>
 
-          <div className="mt-20 pt-12 border-t border-slate-200 flex flex-wrap gap-12">
-            <div>
-              <p className="text-2xl font-bold text-slate-900">₦500M+</p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Processed</p>
+          <div className="mt-20 pt-16 border-t border-slate-800 flex flex-wrap gap-12 justify-between">
+            <div className="space-y-1">
+              <p className="text-3xl font-black text-white italic tracking-tighter uppercase">₦500M+</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Processed</p>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-slate-900">0.05s</p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Avg. Confirmation</p>
+            <div className="space-y-1">
+              <p className="text-3xl font-black text-white italic tracking-tighter uppercase">0.05s</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Latency</p>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-slate-900">24/7</p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Network Uptime</p>
+            <div className="space-y-1">
+              <p className="text-3xl font-black text-white italic tracking-tighter uppercase">24/7</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Uptime</p>
             </div>
           </div>
         </div>
