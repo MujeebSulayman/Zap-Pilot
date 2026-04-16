@@ -4,20 +4,20 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   ArrowRight, 
-  Wallet, 
-  TrendingUp, 
   ShieldCheck, 
   Unlock,
   UserPlus,
-  ArrowUpRight,
   User,
   Mail,
   Lock,
-  Zap
+  TrendingUp,
+  CreditCard,
+  Zap,
+  CheckCircle2
 } from 'lucide-react'
 import { useAuthStore, AuthState } from '@/store/useAuthStore'
 
-export default function WhiteBalancedPage() {
+export default function ProfessionalAuthPage() {
   const [authMode, setAuthMode] = useState<'signup' | 'login'>('login')
   const router = useRouter()
   const setUser = useAuthStore((state: AuthState) => state.setUser)
@@ -59,48 +59,29 @@ export default function WhiteBalancedPage() {
   return (
     <div className="lg:h-screen flex flex-col lg:flex-row bg-white lg:overflow-hidden">
       
-      {/* LEFT SIDE: Auth Form (50%) */}
-      <div className="lg:w-1/2 flex flex-col justify-center items-center p-8 lg:p-12 border-r border-slate-100 bg-white overflow-y-auto">
-        <div className="w-full max-w-[420px]">
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-sm">
+      {/* LEFT SIDE: Auth Form (Focused & Minimal) */}
+      <div className="lg:w-[45%] flex flex-col justify-center items-center p-8 lg:p-16 border-r border-slate-100 bg-white z-10">
+        <div className="w-full max-w-[400px]">
+          <div className="mb-10">
+            <div className="flex items-center gap-2 mb-10">
+              <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-black text-lg">
                 Z
               </div>
-              <span className="text-2xl font-black text-slate-900 tracking-tight italic uppercase">Zap Pilot</span>
+              <span className="text-xl font-black text-slate-900 tracking-tighter uppercase italic">Zap Pilot</span>
             </div>
             
             <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tighter">
-              {authMode === 'signup' ? 'Ready for takeoff.' : 'Welcome back, Pilot.'}
+              {authMode === 'signup' ? 'Institutional access to DeFi.' : 'Sign in to your account'}
             </h2>
             <p className="text-slate-500 font-medium text-base">
               {authMode === 'signup' 
-                ? 'Join the high-yield revolution in under 2 minutes.' 
-                : 'Enter your credentials to manage your capital.'}
+                ? 'Join thousands of capital pilots maximizing their yield.' 
+                : 'Welcome back. Manage your liquidity and growth.'}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 p-1 bg-slate-50 rounded-xl mb-8 border border-slate-100">
-            <button 
-              onClick={() => { setAuthMode('signup'); setError('') }}
-              className={`py-2 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2 ${
-                authMode === 'signup' ? 'bg-white text-slate-900 shadow-sm border border-slate-100' : 'text-slate-500 hover:text-slate-700'
-              }`}
-            >
-              <UserPlus className="w-4 h-4" /> Sign Up
-            </button>
-            <button 
-              onClick={() => { setAuthMode('login'); setError('') }}
-              className={`py-2 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2 ${
-                authMode === 'login' ? 'bg-white text-slate-900 shadow-sm border border-slate-100' : 'text-slate-500 hover:text-slate-700'
-              }`}
-            >
-              <Unlock className="w-4 h-4" /> Sign In
-            </button>
-          </div>
-
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-xl border border-red-100 mb-6 text-sm font-semibold flex items-center gap-3">
+            <div className="bg-red-50 text-red-600 p-3 rounded-xl border border-red-100 mb-6 text-sm font-semibold flex items-center gap-3 animate-fade-up">
                <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
                {error}
             </div>
@@ -108,138 +89,164 @@ export default function WhiteBalancedPage() {
 
           <form onSubmit={handleAuth} className="space-y-4">
             {authMode === 'signup' && (
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors border-r border-slate-100 pr-4 my-2.5">
-                  <User className="w-4 h-4 text-slate-400 group-focus-within:text-emerald-600" />
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Full Name</label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors pr-4 my-2.5">
+                    <User className="w-4 h-4 text-slate-400 group-focus-within:text-slate-900" />
+                  </div>
+                  <input 
+                    type="text" 
+                    required
+                    placeholder="John Doe"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 pl-12 pr-4 py-3 rounded-xl outline-none transition-all font-semibold text-slate-900 placeholder:text-slate-300 text-sm"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                  />
                 </div>
-                <input 
-                  type="text" 
-                  required
-                  placeholder="Full Name"
-                  className="w-full bg-slate-50 border border-slate-100 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 pl-16 pr-4 py-3 rounded-xl outline-none transition-all font-semibold text-slate-900 placeholder:text-slate-400 text-sm"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                />
               </div>
             )}
             
-            <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors border-r border-slate-100 pr-4 my-2.5">
-                <Mail className="w-4 h-4 text-slate-400 group-focus-within:text-emerald-600" />
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Email Address</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors pr-4 my-2.5">
+                  <Mail className="w-4 h-4 text-slate-400 group-focus-within:text-slate-900" />
+                </div>
+                <input 
+                  type="email" 
+                  required
+                  placeholder="name@company.com"
+                  className="w-full bg-slate-50 border border-slate-200 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 pl-12 pr-4 py-3 rounded-xl outline-none transition-all font-semibold text-slate-900 placeholder:text-slate-300 text-sm"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
               </div>
-              <input 
-                type="email" 
-                required
-                placeholder="Email Address"
-                className="w-full bg-slate-50 border border-slate-100 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 pl-16 pr-4 py-3 rounded-xl outline-none transition-all font-semibold text-slate-900 placeholder:text-slate-400 text-sm"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
             </div>
             
-            <div className="relative group pb-1">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors border-r border-slate-100 pr-4 my-2.5">
-                <Lock className="w-4 h-4 text-slate-400 group-focus-within:text-emerald-600" />
+            <div className="space-y-1.5 pb-2">
+              <div className="flex justify-between items-center ml-1">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Password</label>
+                {authMode === 'login' && <span className="text-[10px] font-bold text-slate-400 hover:text-slate-900 cursor-pointer">Forgot?</span>}
               </div>
-              <input 
-                type="password" 
-                required
-                placeholder="Password"
-                className="w-full bg-slate-50 border border-slate-100 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 pl-16 pr-4 py-3 rounded-xl outline-none transition-all font-semibold text-slate-900 placeholder:text-slate-400 text-sm"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors pr-4 my-2.5">
+                  <Lock className="w-4 h-4 text-slate-400 group-focus-within:text-slate-900" />
+                </div>
+                <input 
+                  type="password" 
+                  required
+                  placeholder="••••••••"
+                  className="w-full bg-slate-50 border border-slate-200 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 pl-12 pr-4 py-3 rounded-xl outline-none transition-all font-semibold text-slate-900 placeholder:text-slate-300 text-sm"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+              </div>
             </div>
 
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-3.5 rounded-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base shadow-sm group"
+              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base shadow-sm group active:scale-[0.99]"
             >
-              {loading ? 'Authenticating...' : authMode === 'signup' ? 'Create Account' : 'Welcome Abroad'}
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              {loading ? 'Processing...' : authMode === 'signup' ? 'Create Pilot Account' : 'Sign In'}
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
 
-          <p className="mt-8 text-slate-500 text-[11px] text-center font-medium leading-relaxed">
-            By continuing you agree to the <span className="text-slate-900 font-bold hover:underline cursor-pointer">Terms of Service</span>.
-          </p>
+          <div className="mt-8 pt-8 border-t border-slate-50 flex flex-col items-center gap-4">
+            <button 
+              onClick={() => { setAuthMode(authMode === 'signup' ? 'login' : 'signup'); setError('') }}
+              className="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors"
+            >
+              {authMode === 'signup' ? 'Already have an account? Sign In' : "Don't have an account? Create one"}
+            </button>
+            <p className="text-slate-400 text-[10px] text-center font-medium leading-relaxed max-w-[280px]">
+              By continuing you agree to Zap Pilot's <span className="text-slate-900 font-bold hover:underline cursor-pointer">Terms</span> and <span className="text-slate-900 font-bold hover:underline cursor-pointer">Privacy Policy</span>.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* RIGHT SIDE: Details & Value (Hidded on Mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 bg-slate-50 flex-col justify-center p-8 lg:p-16 overflow-y-auto">
-        <div className="max-w-xl mx-auto lg:mx-0">
-          <h1 className="text-4xl lg:text-6xl font-black text-slate-900 leading-tight mb-4 tracking-tighter">
-            Capital growth, <br />
-            <span className="text-emerald-600">fully automated.</span>
-          </h1>
-          <p className="text-lg text-slate-500 font-medium leading-relaxed mb-10">
-            Institutional-grade yield infrastructure for Nigeria. Experience high-end tools designed specifically for the modern capital pilot.
-          </p>
-
-          <div className="space-y-6">
-            {/* Live Yield Snapshots */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
-                 <div className="flex justify-between items-center mb-2">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">USDC Savings</span>
-                    <TrendingUp className="w-3 h-3 text-emerald-600" />
+      {/* RIGHT SIDE: Fintech Showcase (Ghost UI / Value Deck) */}
+      <div className="hidden lg:flex lg:w-[55%] bg-slate-50 flex-col relative overflow-hidden">
+        
+        {/* Ghost UI Mockup */}
+        <div className="absolute top-20 left-20 right-[-100px] bottom-[-100px] bg-white rounded-tl-[40px] shadow-2xl border border-slate-200 p-12 animate-fade-up">
+           <div className="max-w-2xl">
+              <div className="flex items-center justify-between mb-12">
+                 <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200" />
+                    <div className="space-y-2">
+                       <div className="w-32 h-3 bg-slate-100 rounded-full" />
+                       <div className="w-20 h-2 bg-slate-50 rounded-full" />
+                    </div>
                  </div>
-                 <div className="text-2xl font-black text-slate-900">12.4% <span className="text-xs text-slate-400 font-bold">APY</span></div>
-              </div>
-              <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
-                 <div className="flex justify-between items-center mb-2">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">DAI Yield</span>
-                    <TrendingUp className="w-3 h-3 text-emerald-600" />
+                 <div className="flex gap-2">
+                   <div className="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider">Verified</div>
+                   <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100" />
                  </div>
-                 <div className="text-2xl font-black text-slate-900">10.1% <span className="text-xs text-slate-400 font-bold">APY</span></div>
               </div>
-            </div>
 
-            {/* Workflow Description */}
-            <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm">
-              <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-emerald-600" /> Instant NGN to Yield Flow
-              </h3>
-              <div className="flex items-center justify-between relative px-2">
-                <div className="flex flex-col items-center gap-2 z-10">
-                  <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-900">NGN</div>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase">Bank</span>
-                </div>
-                <div className="h-px bg-slate-100 flex-1 mx-2 relative top-[-6px]"></div>
-                <div className="flex flex-col items-center gap-2 z-10">
-                  <div className="w-10 h-10 rounded-full bg-slate-50 border border-emerald-600/30 flex items-center justify-center text-xs font-bold text-emerald-600">USD</div>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase">Auto-Convert</span>
-                </div>
-                <div className="h-px bg-slate-100 flex-1 mx-2 relative top-[-6px]"></div>
-                <div className="flex flex-col items-center gap-2 z-10">
-                  <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-emerald-600/20">
-                     <TrendingUp className="w-4 h-4" />
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase">Yielding</span>
-                </div>
+              <div className="grid grid-cols-2 gap-6 mb-12">
+                 <div className="p-6 rounded-3xl border border-slate-100 bg-white">
+                    <p className="text-xs font-bold text-slate-400 uppercase mb-2">Total Net Growth</p>
+                    <p className="text-4xl font-black text-slate-900 tracking-tight flex items-baseline gap-2">
+                      ₦4.2M <span className="text-xs font-bold text-emerald-500">+12.4%</span>
+                    </p>
+                 </div>
+                 <div className="p-6 rounded-3xl border border-slate-100 bg-white">
+                    <p className="text-xs font-bold text-slate-400 uppercase mb-2">Active Protocols</p>
+                    <div className="flex -space-x-2">
+                       {[1,2,3,4].map(i => (
+                         <div key={i} className="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-400">
+                           {i}
+                         </div>
+                       ))}
+                    </div>
+                 </div>
               </div>
-              <p className="mt-6 text-xs text-slate-500 leading-relaxed font-medium">
-                Send Naira from any local bank. We bridge to stablecoins instantly and allocate to institutional-grade vaults—all gaslessly.
-              </p>
-            </div>
-          </div>
 
-          <div className="mt-10 pt-8 border-t border-slate-200 flex flex-wrap gap-8 justify-between">
-            <div className="space-y-0.5">
-              <p className="text-2xl font-black text-slate-900 italic tracking-tighter uppercase">20+</p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Protocols</p>
-            </div>
-            <div className="space-y-0.5">
-              <p className="text-2xl font-black text-slate-900 italic tracking-tighter uppercase">65+</p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Chains</p>
-            </div>
-            <div className="space-y-0.5">
-              <p className="text-2xl font-black text-slate-900 italic tracking-tighter uppercase">100+</p>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Liquid Assets</p>
-            </div>
-          </div>
+              {/* Ghost List */}
+              <div className="space-y-4 pr-24">
+                 {[1,2,3].map(i => (
+                   <div key={i} className="flex items-center justify-between p-4 rounded-xl border border-slate-50 opacity-60">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50" />
+                        <div className="w-48 h-2 bg-slate-100 rounded-full" />
+                      </div>
+                      <div className="w-20 h-2 bg-emerald-100 rounded-full" />
+                   </div>
+                 ))}
+              </div>
+           </div>
+        </div>
+
+        {/* Floating Value Badges */}
+        <div className="absolute bottom-20 left-12 right-12 z-20 pointer-events-none">
+           <div className="flex gap-4">
+              <div className="bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white shadow-slate-200/50 max-w-[240px] flex-1">
+                 <ShieldCheck className="w-6 h-6 text-emerald-600 mb-3" />
+                 <h4 className="font-bold text-slate-900 mb-1">Bank-Grade Security</h4>
+                 <p className="text-xs text-slate-500 leading-relaxed">Dedicated managed wallets powered by the world's most secure infra.</p>
+              </div>
+              <div className="bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white shadow-slate-200/50 max-w-[240px] flex-1">
+                 <Zap className="w-6 h-6 text-emerald-600 mb-3" />
+                 <h4 className="font-bold text-slate-900 mb-1">Instant Settlement</h4>
+                 <p className="text-xs text-slate-500 leading-relaxed">Deposit NGN and see your funds auto-converted and allocated in seconds.</p>
+              </div>
+           </div>
+
+           <div className="mt-8 flex items-center justify-between px-2">
+              <div className="flex items-center gap-2">
+                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Audited by Top Security Firms</span>
+              </div>
+              <div className="flex gap-6 opacity-30">
+                 <div className="w-16 h-4 bg-slate-900 rounded-sm" />
+                 <div className="w-20 h-4 bg-slate-900 rounded-sm" />
+              </div>
+           </div>
         </div>
       </div>
 
