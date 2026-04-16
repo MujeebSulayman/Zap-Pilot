@@ -3,10 +3,11 @@ import { getEarnVaultByAddress } from '@/services/lifi.service'
 
 export async function GET(
   req: Request,
-  { params }: { params: { chainId: string; address: string } }
+  { params }: { params: Promise<{ chainId: string; address: string }> }
 ) {
   try {
-    const { chainId, address } = params
+    const { chainId, address } = await params
+
     const vault = await getEarnVaultByAddress(Number(chainId), address)
     
     if (!vault) {
