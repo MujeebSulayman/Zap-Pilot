@@ -11,14 +11,15 @@ import {
   Mail,
   Lock,
   TrendingUp,
-  CreditCard,
   Zap,
-  CheckCircle2
+  CheckCircle2,
+  ExternalLink,
+  ArrowUpRight
 } from 'lucide-react'
 import { useAuthStore, AuthState } from '@/store/useAuthStore'
 
-export default function ProfessionalAuthPage() {
-  const [authMode, setAuthMode] = useState<'signup' | 'login'>('login')
+export default function EnhancedFintechAuthPage() {
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
   const router = useRouter()
   const setUser = useAuthStore((state: AuthState) => state.setUser)
 
@@ -71,12 +72,12 @@ export default function ProfessionalAuthPage() {
             </div>
             
             <h2 className="text-3xl font-black text-slate-900 mb-2 tracking-tighter">
-              {authMode === 'signup' ? 'Institutional access to DeFi.' : 'Sign in to your account'}
+              {authMode === 'signup' ? 'Start your growth engine.' : 'Sign in to Zap Pilot'}
             </h2>
             <p className="text-slate-500 font-medium text-base">
               {authMode === 'signup' 
-                ? 'Join thousands of capital pilots maximizing their yield.' 
-                : 'Welcome back. Manage your liquidity and growth.'}
+                ? 'The institutional bridge for the modern capital pilot.' 
+                : 'Welcome back. Manage your yields and liquidity.'}
             </p>
           </div>
 
@@ -98,7 +99,7 @@ export default function ProfessionalAuthPage() {
                   <input 
                     type="text" 
                     required
-                    placeholder="John Doe"
+                    placeholder="e.g. Samuel Ade"
                     className="w-full bg-slate-50 border border-slate-200 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 pl-12 pr-4 py-3 rounded-xl outline-none transition-all font-semibold text-slate-900 placeholder:text-slate-300 text-sm"
                     value={name}
                     onChange={e => setName(e.target.value)}
@@ -108,7 +109,7 @@ export default function ProfessionalAuthPage() {
             )}
             
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Email Address</label>
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Work Email</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors pr-4 my-2.5">
                   <Mail className="w-4 h-4 text-slate-400 group-focus-within:text-slate-900" />
@@ -127,7 +128,7 @@ export default function ProfessionalAuthPage() {
             <div className="space-y-1.5 pb-2">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Password</label>
-                {authMode === 'login' && <span className="text-[10px] font-bold text-slate-400 hover:text-slate-900 cursor-pointer">Forgot?</span>}
+                {authMode === 'login' && <span className="text-[10px] font-bold text-slate-400 hover:text-slate-900 cursor-pointer">Recover Access</span>}
               </div>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors pr-4 my-2.5">
@@ -149,7 +150,7 @@ export default function ProfessionalAuthPage() {
               disabled={loading}
               className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base shadow-sm group active:scale-[0.99]"
             >
-              {loading ? 'Processing...' : authMode === 'signup' ? 'Create Pilot Account' : 'Sign In'}
+              {loading ? 'Securing Access...' : authMode === 'signup' ? 'Create Pilot Account' : 'Sign In Now'}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
@@ -159,92 +160,122 @@ export default function ProfessionalAuthPage() {
               onClick={() => { setAuthMode(authMode === 'signup' ? 'login' : 'signup'); setError('') }}
               className="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors"
             >
-              {authMode === 'signup' ? 'Already have an account? Sign In' : "Don't have an account? Create one"}
+              {authMode === 'signup' ? 'Already using Zap Pilot? Sign In' : "New to the platform? Create an account"}
             </button>
             <p className="text-slate-400 text-[10px] text-center font-medium leading-relaxed max-w-[280px]">
-              By continuing you agree to Zap Pilot's <span className="text-slate-900 font-bold hover:underline cursor-pointer">Terms</span> and <span className="text-slate-900 font-bold hover:underline cursor-pointer">Privacy Policy</span>.
+              Secured by bank-grade encryption and audited protocols. <span className="text-slate-900 font-bold hover:underline cursor-pointer">Security Policy</span>.
             </p>
           </div>
         </div>
       </div>
 
-      {/* RIGHT SIDE: Fintech Showcase (Ghost UI / Value Deck) */}
+      {/* RIGHT SIDE: Fintech Showcase (No External Images Needed - Fully Interactive Reveal) */}
       <div className="hidden lg:flex lg:w-[55%] bg-slate-50 flex-col relative overflow-hidden">
         
-        {/* Ghost UI Mockup */}
-        <div className="absolute top-20 left-20 right-[-100px] bottom-[-100px] bg-white rounded-tl-[40px] shadow-2xl border border-slate-200 p-12 animate-fade-up">
-           <div className="max-w-2xl">
-              <div className="flex items-center justify-between mb-12">
+        {/* Mock App UI - Built with pure CSS for absolute crispness */}
+        <div className="absolute top-20 left-20 right-[-200px] bottom-[-200px] bg-white rounded-tl-[40px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.15)] border border-slate-200 p-12 animate-fade-up">
+           <div className="max-w-[800px]">
+              <div className="flex items-center justify-between mb-16">
                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200" />
-                    <div className="space-y-2">
-                       <div className="w-32 h-3 bg-slate-100 rounded-full" />
-                       <div className="w-20 h-2 bg-slate-50 rounded-full" />
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-50 content-center flex items-center justify-center">
+                       <Zap className="w-8 h-8 text-emerald-600" />
+                    </div>
+                    <div className="space-y-1.5">
+                       <div className="w-40 h-3.5 bg-slate-900 rounded-full" />
+                       <div className="w-24 h-2 bg-slate-200 rounded-full" />
                     </div>
                  </div>
-                 <div className="flex gap-2">
-                   <div className="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider">Verified</div>
-                   <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100" />
+                 <div className="flex gap-3">
+                   <div className="px-5 py-2.5 rounded-xl bg-emerald-500 text-white text-[10px] font-black uppercase tracking-wider shadow-lg shadow-emerald-500/20 flex items-center gap-2">
+                      <CheckCircle2 className="w-3 h-3" /> Live Protocol
+                   </div>
+                   <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-slate-400" />
+                   </div>
                  </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-6 mb-12">
-                 <div className="p-6 rounded-3xl border border-slate-100 bg-white">
-                    <p className="text-xs font-bold text-slate-400 uppercase mb-2">Total Net Growth</p>
-                    <p className="text-4xl font-black text-slate-900 tracking-tight flex items-baseline gap-2">
-                      ₦4.2M <span className="text-xs font-bold text-emerald-500">+12.4%</span>
+              <div className="grid grid-cols-2 gap-8 mb-16">
+                 <div className="p-8 rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-100/50">
+                    <div className="flex items-center justify-between mb-4">
+                       <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Growth Forecast</p>
+                       <span className="text-emerald-500 font-black text-sm">+14.2%</span>
+                    </div>
+                    <p className="text-5xl font-black text-slate-900 tracking-tighter mb-1">
+                      ₦12.8M
                     </p>
+                    <p className="text-xs text-slate-400 font-semibold italic">Net Performance • 30d</p>
                  </div>
-                 <div className="p-6 rounded-3xl border border-slate-100 bg-white">
-                    <p className="text-xs font-bold text-slate-400 uppercase mb-2">Active Protocols</p>
-                    <div className="flex -space-x-2">
-                       {[1,2,3,4].map(i => (
-                         <div key={i} className="w-8 h-8 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-400">
-                           {i}
+                 <div className="p-8 rounded-[32px] border border-slate-100 bg-white shadow-xl shadow-slate-100/50">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Yield Sources</p>
+                    <div className="flex items-center gap-4">
+                       {[
+                         { sym: 'USDC', color: 'bg-blue-500', apy: '12%' },
+                         { sym: 'DAI', color: 'bg-orange-400', apy: '10%' },
+                         { sym: 'USDT', color: 'bg-emerald-500', apy: '13%' }
+                       ].map((token, i) => (
+                         <div key={i} className="flex flex-col items-center gap-2">
+                            <div className={`w-12 h-12 rounded-full ${token.color} border-4 border-white shadow-md flex items-center justify-center text-[8px] font-black text-white`}>
+                              {token.sym}
+                            </div>
+                            <span className="text-[10px] font-black text-slate-900">{token.apy}</span>
                          </div>
                        ))}
                     </div>
                  </div>
               </div>
 
-              {/* Ghost List */}
-              <div className="space-y-4 pr-24">
-                 {[1,2,3].map(i => (
-                   <div key={i} className="flex items-center justify-between p-4 rounded-xl border border-slate-50 opacity-60">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-slate-50" />
-                        <div className="w-48 h-2 bg-slate-100 rounded-full" />
+              {/* Protocol Transctions List */}
+              <div className="space-y-5">
+                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Real-time Settlement Hub</p>
+                 {[
+                   { label: 'Bank On-ramp Completed', amount: '+₦500,000', color: 'text-emerald-500' },
+                   { label: 'USDC Vault Allocation', amount: '-$580.42', color: 'text-slate-900' },
+                   { label: 'Yield Compounded', amount: '+$14.20', color: 'text-emerald-500' }
+                 ].map((t, i) => (
+                   <div key={i} className="flex items-center justify-between p-5 rounded-2xl bg-slate-50/50 border border-slate-50 transition-all hover:bg-slate-50 hover:px-6 group cursor-default">
+                      <div className="flex items-center gap-5">
+                        <div className="w-11 h-11 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center">
+                           <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-slate-900 transition-colors" />
+                        </div>
+                        <p className="font-bold text-slate-700">{t.label}</p>
                       </div>
-                      <div className="w-20 h-2 bg-emerald-100 rounded-full" />
+                      <div className={`font-black text-sm tracking-tight ${t.color}`}>{t.amount}</div>
                    </div>
                  ))}
               </div>
            </div>
         </div>
 
-        {/* Floating Value Badges */}
-        <div className="absolute bottom-20 left-12 right-12 z-20 pointer-events-none">
+        {/* Value Prop Floating Layer */}
+        <div className="absolute bottom-16 left-12 right-12 z-20 pointer-events-none">
            <div className="flex gap-4">
-              <div className="bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white shadow-slate-200/50 max-w-[240px] flex-1">
-                 <ShieldCheck className="w-6 h-6 text-emerald-600 mb-3" />
-                 <h4 className="font-bold text-slate-900 mb-1">Bank-Grade Security</h4>
-                 <p className="text-xs text-slate-500 leading-relaxed">Dedicated managed wallets powered by the world's most secure infra.</p>
+              <div className="bg-white/95 backdrop-blur-md p-8 rounded-[40px] shadow-2xl border border-white shadow-slate-200/50 max-w-[280px] flex-1">
+                 <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mb-6">
+                    <ShieldCheck className="w-6 h-6 text-emerald-600" />
+                 </div>
+                 <h4 className="font-black text-slate-900 text-lg mb-2">Non-Custodial</h4>
+                 <p className="text-xs text-slate-500 leading-relaxed font-medium">Your funds never leave the blockchain. Professional wallets with zero counterparty risk.</p>
               </div>
-              <div className="bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white shadow-slate-200/50 max-w-[240px] flex-1">
-                 <Zap className="w-6 h-6 text-emerald-600 mb-3" />
-                 <h4 className="font-bold text-slate-900 mb-1">Instant Settlement</h4>
-                 <p className="text-xs text-slate-500 leading-relaxed">Deposit NGN and see your funds auto-converted and allocated in seconds.</p>
+              <div className="bg-white/95 backdrop-blur-md p-8 rounded-[40px] shadow-2xl border border-white shadow-slate-200/50 max-w-[280px] flex-1">
+                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-6">
+                    <ArrowUpRight className="w-6 h-6 text-blue-600" />
+                 </div>
+                 <h4 className="font-black text-slate-900 text-lg mb-2">Automated Payouts</h4>
+                 <p className="text-xs text-slate-500 leading-relaxed font-medium">Withdraw to your Nigerian bank 24/7. Instant NGN liquidation at the best market rates.</p>
               </div>
            </div>
 
-           <div className="mt-8 flex items-center justify-between px-2">
-              <div className="flex items-center gap-2">
-                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Audited by Top Security Firms</span>
+           <div className="mt-12 flex items-center justify-between px-6">
+              <div className="flex items-center gap-3">
+                 <div className="flex -space-x-2">
+                    {[1,2,3].map(i => <div key={i} className="w-6 h-6 rounded-full bg-slate-200 border border-white" />)}
+                 </div>
+                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Trusted by 2,000+ Pilots</span>
               </div>
-              <div className="flex gap-6 opacity-30">
-                 <div className="w-16 h-4 bg-slate-900 rounded-sm" />
-                 <div className="w-20 h-4 bg-slate-900 rounded-sm" />
+              <div className="flex gap-4 opacity-40">
+                 <div className="px-3 py-1 bg-slate-900 text-white rounded font-black text-[8px] uppercase tracking-tighter">PCI DSS</div>
+                 <div className="px-3 py-1 bg-slate-900 text-white rounded font-black text-[8px] uppercase tracking-tighter">SEC COMPLIANCE</div>
               </div>
            </div>
         </div>
