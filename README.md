@@ -1,4 +1,4 @@
-# Zap Pilot ⚡
+# Zap Pilot
 
 An automated yield application designed to remove crypto complexity and enable users to instantly move fiat from local bank accounts into decentralized yield strategies. Powered by **LI.FI Earn** and **LI.FI Composer**.
 
