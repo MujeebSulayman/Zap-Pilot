@@ -148,20 +148,21 @@ export default function VaultDetailPage() {
 
         {/* Action Panel */}
         <div className="w-full lg:w-96 space-y-6">
-          <div className="bg-slate-900 rounded-3xl p-6 text-white shadow-xl animate-fade-up" style={{ animationDelay: '0.1s' }}>
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 text-slate-900 shadow-sm animate-fade-up" style={{ animationDelay: '0.1s' }}>
             <h3 className="font-bold text-xl mb-6">Allocate Capital</h3>
             
             <div className="space-y-4 mb-8">
               <div>
-                <label className="block text-sm text-slate-400 mb-2">Amount (NGN)</label>
+                <label className="block text-sm text-slate-500 mb-2 font-medium">Amount (NGN)</label>
                 <input 
                   type="number"
                   placeholder="0.00"
-                  className="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-[#10B981] outline-none transition-all placeholder:text-slate-600"
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-slate-900 outline-none transition-all placeholder:text-slate-400"
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(e.target.value)}
                 />
               </div>
+
               
               {!vault.isTransactional ? (
                 <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-xl text-sm leading-relaxed">
@@ -171,7 +172,7 @@ export default function VaultDetailPage() {
                 <button 
                   onClick={handleDeposit}
                   disabled={allocating || !depositAmount}
-                  className="w-full bg-[#10B981] hover:bg-[#059669] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-glow"
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                 >
                   {allocating ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
                   {allocating ? 'Executing gasless...' : 'Allocate Now'}
@@ -179,13 +180,13 @@ export default function VaultDetailPage() {
               )}
             </div>
 
-            <div className="pt-6 border-t border-slate-800">
+            <div className="pt-6 border-t border-slate-100">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-slate-400 font-medium text-sm flex items-center gap-1">
+                <span className="text-slate-500 font-medium text-sm flex items-center gap-1">
                   <TrendingUp className="w-4 h-4" /> Growth Simulator
                 </span>
                 <select 
-                  className="bg-slate-800 border border-slate-700 text-xs rounded px-2 py-1 outline-none text-white cursor-pointer"
+                  className="bg-slate-50 border border-slate-200 text-xs rounded px-2 py-1 outline-none text-slate-900 cursor-pointer"
                   value={simDuration}
                   onChange={(e) => setSimDuration(Number(e.target.value))}
                 >
@@ -198,21 +199,22 @@ export default function VaultDetailPage() {
               <button 
                 onClick={handleSimulate}
                 disabled={!depositAmount || isSimulating}
-                className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-semibold transition-colors"
+                className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-colors"
               >
                 Project Return
               </button>
 
               {simulatedValue !== null && (
-                <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
-                  <p className="text-xs text-emerald-400 font-medium mb-1">Estimated Value</p>
-                  <p className="text-xl font-bold text-emerald-50">
+                <div className="mt-4 p-4 bg-emerald-50 border border-emerald-100 rounded-xl text-center">
+                  <p className="text-xs text-emerald-600 font-medium mb-1">Estimated Value</p>
+                  <p className="text-xl font-bold text-slate-900">
                     ₦{Math.floor(simulatedValue).toLocaleString()}
                   </p>
                 </div>
               )}
             </div>
           </div>
+
 
           <div className="glass p-5 rounded-2xl animate-fade-up" style={{ animationDelay: '0.2s' }}>
              <p className="text-xs text-slate-500 leading-relaxed flex items-start gap-2">

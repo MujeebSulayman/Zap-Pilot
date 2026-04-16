@@ -33,29 +33,30 @@ export default function DashboardPage() {
       <div className="grid md:grid-cols-3 gap-6 mb-10">
         
         {/* Core Balance Card */}
-        <div className="md:col-span-2 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden animate-fade-up" style={{ animationDelay: '0.1s' }}>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+        <div className="md:col-span-2 bg-white border border-slate-200 rounded-3xl p-8 text-slate-900 shadow-sm relative overflow-hidden animate-fade-up" style={{ animationDelay: '0.1s' }}>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -mr-20 -mt-20"></div>
           
           <div className="relative z-10 flex flex-col justify-between h-full">
             <div>
-              <p className="text-slate-400 font-medium mb-1">Available NGN Balance</p>
-              <h2 className="text-5xl font-bold tracking-tight">
+              <p className="text-slate-500 font-medium mb-1">Available NGN Balance</p>
+              <h2 className="text-5xl font-black tracking-tight text-slate-900">
                 ₦{fiatBalance.toLocaleString()}
               </h2>
             </div>
 
             <div className="flex items-center gap-4 mt-8">
-              <Link href="/funding" className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-glow">
+              <Link href="/funding" className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-sm">
                 <ArrowDownToLine className="w-4 h-4" /> Deposit NGN
               </Link>
               {hasBalance && (
-                <Link href="/vaults" className="bg-white/10 hover:bg-white/20 text-white border border-white/10 px-6 py-3 rounded-xl font-semibold transition-all">
+                <Link href="/vaults" className="bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-6 py-3 rounded-xl font-semibold transition-all">
                   Allocate to Yield
                 </Link>
               )}
             </div>
           </div>
         </div>
+
 
         {/* Portfolio Stats Card */}
         <div className="glass rounded-3xl p-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
