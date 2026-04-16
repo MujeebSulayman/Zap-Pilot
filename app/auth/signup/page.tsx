@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuthStore } from '@/store/useAuthStore'
+import { useAuthStore, AuthState } from '@/store/useAuthStore'
 
 export default function SignupPage() {
   const [name, setName] = useState('')
@@ -13,7 +13,8 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [creatingWallet, setCreatingWallet] = useState(false)
   const router = useRouter()
-  const setUser = useAuthStore(state => state.setUser)
+  const setUser = useAuthStore((state: AuthState) => state.setUser)
+
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,7 +50,7 @@ export default function SignupPage() {
     <div className="flex-1 flex items-center justify-center p-6 bg-slate-50">
       <div className="w-full max-w-md glass p-8 rounded-3xl animate-fade-up">
         <h2 className="text-2xl font-bold text-slate-900 mb-2">Create Account</h2>
-        <p className="text-slate-600 mb-8">Start earning automated yields with zero crypto knowledge required.</p>
+        <p className="text-slate-600 mb-8">Start earning automated yields on-chain with zero crypto knowledge required.</p>
         
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-6 text-sm font-medium">

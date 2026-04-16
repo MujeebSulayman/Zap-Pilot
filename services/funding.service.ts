@@ -3,23 +3,59 @@ import { logActivity } from './activity.service'
 import crypto from 'crypto'
 
 export async function initiateFiatDeposit(userId: string, amount: number) {
-  const reference = `fd_${crypto.randomUUID().replace(/-/g, '')}`
-  
+  // --------------------------------------------------------------------------
+  // REAL PAYCREST API INTEGRATION (ON-RAMP)
+  // Fetch real payment link or deposit parameters from Paycrest.
+  // --------------------------------------------------------------------------
+  const apiKey = process.env.PAYCREST_API_KEY;
+  if (!apiKey) {
+    throw new Error("Missing Paycrest configuration (PAYCREST_API_KEY)");
+  }
+
+  let paymentReference: string;
+  let paymentStatus: string;
+
+  try {
+    const response = await fetch(`https://api.paycrest.io/v1/on-ramp/deposits`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        userId,
+        amount,
+        currency: 'NGN',
+        callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/funding/webhook`
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Paycrest API error: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    paymentReference = data.reference || data.data?.reference || `fd_${crypto.randomUUID().replace(/-/g, '')}`;
+    paymentStatus = data.status || data.data?.status || 'PENDING';
+
+  } catch (error) {
+    console.error("Failed to initiate Paycrest deposit:", error);
+    throw new Error("Could not initiate deposit via Paycrest");
+  }
+
   const deposit = await prisma.fiatDeposit.create({
     data: {
       userId,
       amount,
       currency: 'NGN',
-      status: 'COMPLETED', // Auto-completing for smooth UX flow
-      reference
+      status: paymentStatus,
+      reference: paymentReference
     }
   })
 
   // Log activity
-  await logActivity(userId, 'DEPOSIT_FIAT', JSON.stringify({ amount, currency: 'NGN', reference }))
-
-  // Update Profile Balance (In a real app, fiat balance might live in a ledger or wallet provider API)
-  // For the MVP we will just keep track of historical deposits/purchases. We can simulate user balance via summing completed deposits.
+  await logActivity(userId, 'DEPOSIT_FIAT', JSON.stringify({ amount, currency: 'NGN', reference: paymentReference }))
 
   return deposit
 }

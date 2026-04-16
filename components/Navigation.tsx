@@ -19,6 +19,8 @@ export function Navigation() {
       .finally(() => setLoading(false))
   }, [setUser, setLoading])
 
+  if (pathname === '/') return null
+
   return (
     <nav className="fixed top-0 inset-x-0 h-16 glass z-50 flex items-center px-6">
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between">

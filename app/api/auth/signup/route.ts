@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { signToken, setSessionCookie } from '@/lib/auth'
+import { createWalletForUser } from '@/services/wallet.service'
 
 export async function POST(req: Request) {
   try {
@@ -31,6 +32,9 @@ export async function POST(req: Request) {
         }
       }
     })
+
+    // Provision Blockradar wallet instantly on signup
+    await createWalletForUser(user.id);
 
     const token = await signToken({ userId: user.id })
     await setSessionCookie(token)

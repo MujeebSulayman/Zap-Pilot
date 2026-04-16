@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { ArrowLeft, TrendingUp, ShieldCheck, Zap, Layers, RefreshCw } from 'lucide-react'
+import { ArrowLeft, TrendingUp, ShieldCheck, Zap, Layers, RefreshCw, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 
 export default function VaultDetailPage() {
@@ -49,18 +49,34 @@ export default function VaultDetailPage() {
   const handleDeposit = async () => {
     setAllocating(true)
     try {
-      // In a real app we'd trigger the Composer quote execution via the wallet here.
-      // Currently, we're mocking the transaction success step of 'Blockradar' wallet
-      await new Promise(r => setTimeout(r, 2000))
+      // Fetching a real quote to validate the setup
+      const quoteRes = await fetch('/api/quote/deposit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fromChain: 8453, // Base
+          toChain: params.chainId,
+          fromToken: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', // USDC on Base
+          vaultAddress: params.address,
+          fromAddress: '0x0000000000000000000000000000000000000000', // Placeholder
+          toAddress: '0x0000000000000000000000000000000000000000', // Placeholder
+          fromAmount: (Number(depositAmount) * 10**6).toString(), 
+        })
+      })
       
-      // Assume success
-      alert('Successfully allocated funds to ' + vault.name)
+      if (!quoteRes.ok) throw new Error('Failed to fetch executable quote')
+      
+      // In a production app, we would now pass this quote to the Blockradar managed wallet 
+      // service to sign and broadcast the transaction.
+      alert('Allocation quote retrieved. In a production environment with a funded wallet, this would now execute gaslessly.')
       router.push('/portfolio')
     } catch (err) {
-      alert('Failed to allocate: ' + (err as Error).message)
+      alert('Allocation preview failed: ' + (err as Error).message)
+    } finally {
       setAllocating(false)
     }
   }
+
 
   if (isLoading) return <div className="p-12 text-center text-slate-500">Loading vault...</div>
   if (error || !vault) return <div className="p-12 text-center text-red-500">Vault not found or error loading</div>

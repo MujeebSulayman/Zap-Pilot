@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useAuthStore } from '@/store/useAuthStore'
+import { useAuthStore, AuthState } from '@/store/useAuthStore'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -11,7 +11,8 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const setUser = useAuthStore(state => state.setUser)
+  const setUser = useAuthStore((state: AuthState) => state.setUser)
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()

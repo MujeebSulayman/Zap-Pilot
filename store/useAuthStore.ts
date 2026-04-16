@@ -1,17 +1,18 @@
 import { create } from 'zustand'
 
-interface User {
+export interface User {
   id: string
   email: string
   name?: string
 }
 
-interface AuthState {
+export interface AuthState {
   user: User | null
   isLoading: boolean
   setUser: (user: User | null) => void
   setLoading: (isLoading: boolean) => void
 }
+
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
