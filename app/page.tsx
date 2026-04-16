@@ -1,111 +1,230 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { ArrowRight, Wallet, TrendingUp, ShieldCheck } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { 
+  ArrowRight, 
+  Wallet, 
+  TrendingUp, 
+  ShieldCheck, 
+  Unlock,
+  UserPlus,
+  ArrowUpRight
+} from 'lucide-react'
+import { useAuthStore, AuthState } from '@/store/useAuthStore'
 
-// Mobile-app like onboarding slides
-const ONBOARDING_SLIDES = [
+const FEATURES = [
   {
-    title: "Seamless On-Ramp",
-    description: "Skip the confusing exchanges. Send NGN directly from your bank or bridge stablecoins instantly.",
-    icon: <Wallet className="w-16 h-16 text-blue-600" />,
-    bg: "bg-blue-100"
+    title: "Instant NGN On-Ramp",
+    description: "Simplified liquidity for the Nigerian market. Connect your bank and move NGN directly to yields.",
+    icon: <Wallet className="w-5 h-5 text-slate-600" />
   },
   {
-    title: "Automated Growth",
-    description: "Your funds are allocated into the safest, high-yielding vaults automatically. Watch your wealth grow in real-time.",
-    icon: <TrendingUp className="w-16 h-16 text-[#10B981]" />,
-    bg: "bg-emerald-100"
+    title: "Global Yield Protocols",
+    description: "Institutional-grade access to Aave, Morpho, and Euler without the technical overhead.",
+    icon: <TrendingUp className="w-5 h-5 text-slate-600" />
   },
   {
-    title: "Fully Gasless",
-    description: "Forget gas fees and confusing wallet popups. Each user gets a dedicated wallet automatically powered by Blockradar.",
-    icon: <ShieldCheck className="w-16 h-16 text-purple-600" />,
-    bg: "bg-purple-100"
+    title: "Managed Infrastructure",
+    description: "Gasless transactions and dedicated wallets powered by the Blockradar network.",
+    icon: <ShieldCheck className="w-5 h-5 text-slate-600" />
   }
 ]
 
-export default function OnboardingPage() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  
-  const handleNext = () => {
-    if (currentSlide < ONBOARDING_SLIDES.length - 1) {
-      setCurrentSlide(prev => prev + 1)
+export default function ProfessionalOnboardingPage() {
+  const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup')
+  const router = useRouter()
+  const setUser = useAuthStore((state: AuthState) => state.setUser)
+
+  // Auth Form States
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    
+    const endpoint = authMode === 'signup' ? '/api/auth/signup' : '/api/auth/login'
+    const body = authMode === 'signup' ? { name, email, password } : { email, password }
+
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Authentication failed')
+      
+      setUser(data.user)
+      router.push('/dashboard?onboarded=true')
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const slide = ONBOARDING_SLIDES[currentSlide]
-  const isLastSlide = currentSlide === ONBOARDING_SLIDES.length - 1
-
   return (
-    <div className="flex-1 flex flex-col justify-between items-center w-full px-6 py-6 overflow-hidden bg-slate-50 min-h-[100dvh]">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-white">
       
-      {/* Top section: Progress indicator dots */}
-      <div className="w-full flex justify-between items-center max-w-sm mx-auto pt-4 relative">
-        {!isLastSlide ? (
-          <button 
-            onClick={() => setCurrentSlide(ONBOARDING_SLIDES.length - 1)}
-            className="text-slate-500 font-medium text-sm hover:text-slate-800 transition-colors absolute left-0"
-          >
-            Skip
-          </button>
-        ) : null}
-        
-        <div className="flex gap-2 mx-auto">
-          {ONBOARDING_SLIDES.map((_, index) => (
-            <div 
-              key={index} 
-              className={`h-2 rounded-full transition-all duration-300 ${
-                index === currentSlide ? 'w-6 bg-slate-900' : 'w-2 bg-slate-300'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Main content area */}
-      <div className="flex-1 flex flex-col justify-center items-center max-w-sm mx-auto w-full text-center space-y-8 animate-fade-in transition-all duration-500 mt-4">
-        <div key={currentSlide} className="animate-fade-up w-full flex flex-col items-center">
-          <div className={`w-40 h-40 rounded-[2.5rem] ${slide.bg} flex items-center justify-center mb-10 shadow-sm border border-white/50`}>
-            {slide.icon}
+      {/* LEFT SIDE: Auth Form (Desktop: 45%, Mobile: Full) */}
+      <div className="lg:w-[45%] flex flex-col justify-center items-center p-8 lg:p-24 border-r border-slate-100">
+        <div className="w-full max-w-[400px]">
+          <div className="mb-12">
+            <div className="flex items-center gap-2 mb-10">
+              <div className="w-8 h-8 bg-slate-900 rounded flex items-center justify-center text-white font-bold text-lg">
+                Z
+              </div>
+              <span className="text-xl font-bold text-slate-900 tracking-tight">Zap Pilot</span>
+            </div>
+            
+            <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">
+              {authMode === 'signup' ? 'Create an account' : 'Welcome back'}
+            </h2>
+            <p className="text-slate-500 font-medium">
+              {authMode === 'signup' 
+                ? 'Join 5,000+ pilots building wealth on-chain.' 
+                : 'Enter your credentials to access your dashboard.'}
+            </p>
           </div>
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">
-            {slide.title}
-          </h2>
-          <p className="text-lg text-slate-600 leading-relaxed font-medium">
-            {slide.description}
+
+          <div className="flex border-b border-slate-100 mb-8">
+            <button 
+              onClick={() => { setAuthMode('signup'); setError('') }}
+              className={`pb-4 px-2 text-sm font-bold transition-all relative ${
+                authMode === 'signup' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              Sign Up
+              {authMode === 'signup' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900" />}
+            </button>
+            <button 
+              onClick={() => { setAuthMode('login'); setError('') }}
+              className={`pb-4 px-6 text-sm font-bold transition-all relative ${
+                authMode === 'login' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              Sign In
+              {authMode === 'login' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900" />}
+            </button>
+          </div>
+
+          {error && (
+            <div className="bg-slate-50 text-slate-900 p-4 rounded border border-slate-200 mb-6 text-sm font-medium">
+               {error}
+            </div>
+          )}
+
+          <form onSubmit={handleAuth} className="space-y-6">
+            {authMode === 'signup' && (
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
+                <input 
+                  type="text" 
+                  required
+                  placeholder="Ebube James"
+                  className="w-full border border-slate-200 focus:border-slate-900 focus:ring-0 px-4 py-3 rounded outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+              </div>
+            )}
+            
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Email Address</label>
+              <input 
+                type="email" 
+                required
+                placeholder="ebube@example.com"
+                className="w-full border border-slate-200 focus:border-slate-900 focus:ring-0 px-4 py-3 rounded outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
+            </div>
+            
+            <div className="space-y-2 pb-2">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Password</label>
+              <input 
+                type="password" 
+                required
+                placeholder="••••••••"
+                className="w-full border border-slate-200 focus:border-slate-900 focus:ring-0 px-4 py-3 rounded outline-none transition-all font-medium text-slate-900 placeholder:text-slate-300"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={loading}
+              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading ? 'Processing...' : authMode === 'signup' ? 'Get Started' : 'Sign In'}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+
+          <p className="mt-8 text-slate-400 text-xs text-center lg:text-left">
+            By creating an account you agree to our <span className="text-slate-900 font-bold underline cursor-pointer">Terms</span> and <span className="text-slate-900 font-bold underline cursor-pointer">Privacy Policy</span>.
           </p>
         </div>
       </div>
 
-      {/* Bottom section: Actions */}
-      <div className="w-full max-w-sm mx-auto pb-8 pt-4 space-y-4">
-        {!isLastSlide ? (
-          <button 
-            onClick={handleNext}
-            className="w-full py-4 bg-slate-900 text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition-all active:scale-[0.98]"
-          >
-            Next
-            <ArrowRight className="w-5 h-5" />
-          </button>
-        ) : (
-          <div className="flex flex-col gap-3 animate-fade-up">
-            <Link 
-              href="/auth/signup" 
-              className="w-full py-4 bg-[#10B981] text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 hover:bg-[#059669] shadow-sm transition-all active:scale-[0.98]"
-            >
-              Sign up
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link 
-              href="/auth/login" 
-              className="w-full py-4 bg-white text-slate-800 border-2 border-slate-200 rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 hover:border-slate-300 hover:bg-slate-50 transition-all active:scale-[0.98]"
-            >
-              Sign in
-            </Link>
+      {/* RIGHT SIDE: Details & Value (Desktop: 55%, Mobile: Hidden/Top) */}
+      <div className="lg:w-[55%] bg-slate-50 flex flex-col justify-center p-12 lg:p-24">
+        <div className="max-w-xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-slate-200 text-slate-700 text-xs font-bold mb-8">
+            <span className="w-2 h-2 rounded-full bg-slate-900 animate-pulse" />
+            V0.4 NOW LIVE
           </div>
-        )}
+          
+          <h1 className="text-5xl lg:text-6xl font-black text-slate-900 leading-tight mb-8 tracking-tighter">
+            Automated capital management for Nigeria.
+          </h1>
+          <p className="text-lg text-slate-500 font-medium leading-relaxed mb-16">
+            Skip the complexity of DeFi. Move NGN into yield-bearing assets in seconds. High-end infrastructure designed for the modern pilot.
+          </p>
+
+          <div className="grid gap-10">
+            {FEATURES.map((feature, idx) => (
+              <div key={idx} className="flex gap-6 group">
+                <div className="w-12 h-12 rounded bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-110">
+                  {feature.icon}
+                </div>
+                <div className="flex flex-col justify-center">
+                  <h3 className="font-bold text-slate-900 mb-1 flex items-center gap-2">
+                    {feature.title}
+                    <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all text-slate-400" />
+                  </h3>
+                  <p className="text-slate-500 text-sm leading-relaxed max-w-sm">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-20 pt-12 border-t border-slate-200 flex flex-wrap gap-12">
+            <div>
+              <p className="text-2xl font-bold text-slate-900">₦500M+</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Processed</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-slate-900">0.05s</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Avg. Confirmation</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-slate-900">24/7</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Network Uptime</p>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
