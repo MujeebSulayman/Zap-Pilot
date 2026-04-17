@@ -179,8 +179,13 @@ export default function VaultsMarketplace() {
                   </div>
                   
                   <div className="text-right">
+                    <div className="flex justify-end gap-1 mb-2">
+                       <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[9px] font-bold uppercase tracking-tight border border-slate-200">
+                        {vault.network || 'EVM'}
+                      </span>
+                    </div>
                     <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest mb-1">APY</p>
-                    <div className="inline-flex items-center gap-1 font-black text-emerald-600 bg-emerald-50 px-2.5 py-1.5 rounded-xl border border-emerald-100">
+                    <div className="inline-flex items-center gap-1 font-black text-emerald-600 bg-emerald-50 px-2.5 py-1.5 rounded-xl border border-emerald-100 shadow-sm transition-transform group-hover:scale-105">
                       <TrendingUp className="w-4 h-4" /> {apy}%
                     </div>
                   </div>

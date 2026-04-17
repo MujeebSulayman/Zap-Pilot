@@ -23,8 +23,11 @@ export default function VaultDetailPage() {
     })
   })
 
-  const apy = vault?.analytics?.apy?.total || 0
-  const tvl = parseInt(vault?.analytics?.tvl?.usd || 0).toLocaleString('en-US', { notation: 'compact' })
+  const vaultData = vault?.data || vault
+  const apy = vaultData?.analytics?.apy?.total || 0
+  const tvlRaw = vaultData?.analytics?.tvl?.usd || 0
+  const tvl = parseInt(tvlRaw).toLocaleString('en-US', { notation: 'compact' })
+  const protocolName = typeof vaultData?.protocol === 'string' ? vaultData.protocol : vaultData?.protocol?.name || 'DeFi'
 
   const handleSimulate = async () => {
     if (!depositAmount) return
@@ -94,8 +97,8 @@ export default function VaultDetailPage() {
           <div className="glass p-8 rounded-3xl animate-fade-up">
             <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
               <div className="w-20 h-20 rounded-2xl bg-white p-3 shadow-md border border-slate-100 flex items-center justify-center">
-                {vault.underlyingTokens?.[0]?.logoURI ? (
-                  <img src={vault.underlyingTokens[0].logoURI} alt="Logo" className="w-full h-full object-contain" />
+                {vaultData?.underlyingTokens?.[0]?.logoURI ? (
+                  <img src={vaultData.underlyingTokens[0].logoURI} alt="Logo" className="w-full h-full object-contain" />
                 ) : (
                   <Layers className="w-10 h-10 text-slate-400" />
                 )}
@@ -103,16 +106,16 @@ export default function VaultDetailPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="bg-slate-100 text-slate-600 px-3 py-1 text-xs font-bold uppercase rounded-md tracking-wider">
-                    {vault.protocol}
+                    {protocolName}
                   </span>
-                  {!vault.isTransactional && (
+                  {!vaultData?.isTransactional && (
                     <span className="bg-amber-100 text-amber-700 px-3 py-1 text-xs font-bold uppercase rounded-md flex items-center gap-1">
                       <AlertCircle className="w-3 h-3" /> External Only
                     </span>
                   )}
                 </div>
-                <h1 className="text-3xl font-extrabold text-slate-900 mb-1">{vault.name}</h1>
-                <p className="text-slate-500">Chain ID: {vault.chainId}</p>
+                <h1 className="text-3xl font-extrabold text-slate-900 mb-1">{vaultData?.name}</h1>
+                <p className="text-slate-500">Chain ID: {vaultData?.chainId}</p>
               </div>
             </div>
 
@@ -127,12 +130,12 @@ export default function VaultDetailPage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-slate-500 mb-1">Asset</p>
-                <p className="text-xl font-bold text-slate-900">{vault.underlyingTokens?.[0]?.symbol || 'MIX'}</p>
+                <p className="text-xl font-bold text-slate-900">{vaultData?.underlyingTokens?.[0]?.symbol || 'MIX'}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-slate-500 mb-1">Redeemable</p>
-                <p className={`text-xl font-bold ${vault.isRedeemable ? 'text-blue-600' : 'text-slate-500'}`}>
-                  {vault.isRedeemable ? 'Yes' : 'No'}
+                <p className={`text-xl font-bold ${vaultData?.isRedeemable ? 'text-blue-600' : 'text-slate-500'}`}>
+                  {vaultData?.isRedeemable ? 'Yes' : 'No'}
                 </p>
               </div>
             </div>
@@ -140,7 +143,7 @@ export default function VaultDetailPage() {
             <div className="pt-8">
               <h3 className="font-bold text-lg text-slate-900 mb-4">About the specific strategy</h3>
               <p className="text-slate-600 leading-relaxed max-w-3xl">
-                This vault aggregates yield by automatically moving {vault.underlyingTokens?.[0]?.symbol} across top decentralized protocols on the specified network. APY is historical and compounded via {vault.protocol}. By depositing, you receive a receipt token that appreciates against the underlying asset.
+                This vault aggregates yield by automatically moving {vaultData?.underlyingTokens?.[0]?.symbol} across top decentralized protocols on the specified network. APY is historical and compounded via {protocolName}. By depositing, you receive a receipt token that appreciates against the underlying asset.
               </p>
             </div>
           </div>
@@ -164,7 +167,7 @@ export default function VaultDetailPage() {
               </div>
 
               
-              {!vault.isTransactional ? (
+              {!vaultData?.isTransactional ? (
                 <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-xl text-sm leading-relaxed">
                   Direct allocation is currently disabled for this vault via Zap Pilot.
                 </div>

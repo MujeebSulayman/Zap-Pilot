@@ -93,22 +93,33 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              {vaults?.vaults?.slice(0, 4).map((vault: any) => (
-                <div key={vault.address} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors group">
-                  <div className="flex items-center gap-3">
-                    <img src={vault.underlyingTokens[0]?.logoURI || 'https://via.placeholder.com/24'} alt="Token" className="w-8 h-8 rounded-full" />
-                    <div>
-                      <p className="font-semibold text-slate-900">{vault.name}</p>
-                      <p className="text-xs text-slate-500 capitalize">{vault.protocol} • {vault.slug?.split('-')[1]}</p>
+              {vaults?.data?.slice(0, 4).map((vault: any) => {
+                const apy = ((vault.analytics?.apy?.total || 0) * 100).toFixed(2)
+                const protocol = typeof vault.protocol === 'string' ? vault.protocol : vault.protocol?.name || 'DeFi'
+                
+                return (
+                  <div key={vault.address} className="flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 transition-all group border border-transparent hover:border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center p-1.5 border border-slate-100 shadow-sm">
+                        <img 
+                          src={vault.underlyingTokens?.[0]?.logoURI || 'https://via.placeholder.com/24'} 
+                          alt="Token" 
+                          className="w-full h-full object-contain" 
+                        />
+                      </div>
+                      <div>
+                        <p className="font-bold text-slate-900 group-hover:text-[#10B981] transition-colors">{vault.name}</p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{protocol}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="inline-flex px-2.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-600 font-black text-sm border border-emerald-100">
+                        {apy}%
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="inline-flex px-2 py-1 rounded bg-[#10B981]/10 text-[#059669] font-bold text-sm">
-                      {(vault.analytics?.apy?.total * 100).toFixed(2)}% APY
-                    </div>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
