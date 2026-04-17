@@ -8,7 +8,6 @@ import { Wallet, ArrowRight, ArrowDownToLine, TrendingUp, Activity } from 'lucid
 export default function DashboardPage() {
   const { user } = useAuthStore()
 
-  // Queries for dashboard blocks
   const { data: funding, isLoading: loadingFunding } = useQuery({
     queryKey: ['fundingHistory'],
     queryFn: () => fetch('/api/funding/history').then(res => res.json())
