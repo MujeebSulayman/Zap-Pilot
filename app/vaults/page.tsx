@@ -145,32 +145,54 @@ export default function VaultsMarketplace() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredVaults.map((vault: any, i: number) => {
-            const apy = ((vault.analytics?.apy?.total || 0) * 100).toFixed(2)
+            const apyValue = vault.analytics?.apy?.total || 0
+            const apy = apyValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
             const tvlb = vault.analytics?.tvl?.usd || 0
             const tvl = parseInt(tvlb).toLocaleString('en-US', { notation: 'compact' })
-            const assetLogo = vault.underlyingTokens?.[0]?.logoURI
+            const assetLogo = vault.underlyingTokens?.[0]?.logoURI || 
+                              `https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/${vault.underlyingTokens?.[0]?.address}/logo.png`
+            const symbol = vault.underlyingTokens?.[0]?.symbol || '?'
             const isTransactional = vault.isTransactional
 
             return (
               <div 
                 key={`${vault.chainId}-${vault.address}`} 
-                className="glass rounded-3xl p-6 hover:shadow-lg transition-all animate-fade-up group relative overflow-hidden flex flex-col"
+                className="glass rounded-3xl p-6 hover:shadow-xl transition-all animate-fade-up group relative overflow-hidden flex flex-col border border-slate-200/50 hover:border-[#10B981]/30 hover:translate-y-[-4px]"
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
                 {!isTransactional && (
-                  <div className="absolute top-0 right-0 bg-blue-100 text-blue-700 text-[10px] font-black px-3 py-1 rounded-bl-xl z-10 tracking-widest">
-                    TRACK ONLY
+                  <div className="absolute top-0 right-0 bg-slate-100 text-slate-500 text-[9px] font-black px-3 py-1.5 rounded-bl-xl z-20 tracking-tighter border-l border-b border-slate-200 uppercase">
+                    Read-Only
                   </div>
                 )}
                 
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-2 border border-slate-100 relative shadow-sm group-hover:scale-110 transition-transform">
-                      {assetLogo ? (
-                        <img src={assetLogo} alt={vault.name} className="w-full h-full object-contain" />
-                      ) : (
-                        <div className="w-6 h-6 rounded-full bg-slate-200" />
-                      )}
+                <div className="flex items-start justify-between mb-6 relative z-10">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 group-hover:scale-110 transition-transform duration-500">
+                        <img 
+                          src={assetLogo} 
+                          alt={vault.name} 
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${symbol}&background=f1f5f9&color=64748b&bold=true`
+                          }}
+                        />
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-lg bg-white p-1 shadow-sm border border-slate-100">
+                         <img 
+                          src={vault.protocol?.logoURI} 
+                          className="w-full h-full object-contain rounded-sm"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            if (target.src.includes('-finance')) {
+                              target.src = target.src.replace('-finance', '')
+                            } else {
+                              target.src = `https://ui-avatars.com/api/?name=${vault.protocol?.name?.charAt(0)}&background=94a3b8&color=ffffff`
+                            }
+                          }}
+                        />
+                      </div>
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-900 leading-tight block max-w-[150px] truncate">{vault.name}</h3>

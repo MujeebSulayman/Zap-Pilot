@@ -94,28 +94,62 @@ export default function VaultDetailPage() {
         
         {/* Main Vault Info */}
         <div className="flex-1 space-y-6">
-          <div className="glass p-8 rounded-3xl animate-fade-up">
-            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-white p-3 shadow-md border border-slate-100 flex items-center justify-center">
-                {vaultData?.underlyingTokens?.[0]?.logoURI ? (
-                  <img src={vaultData.underlyingTokens[0].logoURI} alt="Logo" className="w-full h-full object-contain" />
-                ) : (
-                  <Layers className="w-10 h-10 text-slate-400" />
+          <div className="glass p-8 rounded-3xl animate-fade-up border border-slate-200/50 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#10B981]/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            
+            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8 relative z-10">
+              <div className="relative group">
+                <div className="w-24 h-24 rounded-3xl bg-white p-4 shadow-xl border border-slate-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                  {vaultData?.underlyingTokens?.[0]?.logoURI ? (
+                    <img 
+                      src={vaultData.underlyingTokens[0].logoURI} 
+                      alt="Logo" 
+                      className="w-full h-full object-contain" 
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${vaultData?.underlyingTokens?.[0]?.symbol || '?'}&background=f1f5f9&color=64748b&bold=true`
+                      }}
+                    />
+                  ) : (
+                    <Layers className="w-10 h-10 text-slate-400" />
+                  )}
+                </div>
+                {vaultData?.protocol?.logoURI && (
+                  <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-xl bg-white p-1.5 shadow-xl border border-slate-100 animate-in zoom-in duration-500 delay-300">
+                    <img 
+                      src={vaultData.protocol.logoURI} 
+                      alt={vaultData.protocol.name} 
+                      className="w-full h-full object-contain rounded-sm"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        if (target.src.includes('-finance')) {
+                          target.src = target.src.replace('-finance', '')
+                        } else {
+                          target.style.display = 'none'
+                        }
+                      }}
+                    />
+                  </div>
                 )}
               </div>
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-slate-100 text-slate-600 px-3 py-1 text-xs font-bold uppercase rounded-md tracking-wider">
+                  <span className="bg-slate-900 text-white px-3 py-1 text-[10px] font-black uppercase rounded-lg tracking-widest">
                     {protocolName}
                   </span>
                   {!vaultData?.isTransactional && (
-                    <span className="bg-amber-100 text-amber-700 px-3 py-1 text-xs font-bold uppercase rounded-md flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> External Only
+                    <span className="bg-amber-100 text-amber-700 px-3 py-1 text-[10px] font-black uppercase rounded-lg flex items-center gap-1 tracking-widest border border-amber-200">
+                      <AlertCircle className="w-3 h-3" /> TRACKING ONLY
                     </span>
                   )}
                 </div>
-                <h1 className="text-3xl font-extrabold text-slate-900 mb-1">{vaultData?.name}</h1>
-                <p className="text-slate-500">Chain ID: {vaultData?.chainId}</p>
+                <h1 className="text-4xl font-black text-slate-900 mb-1 lg:text-5xl tracking-tight leading-tight">
+                  {vaultData?.name}
+                </h1>
+                <div className="flex items-center gap-3 text-slate-400 text-sm font-bold uppercase tracking-widest">
+                  <span>Chain ID: {vaultData?.chainId}</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                  <span>{vaultData?.network || 'EVM'}</span>
+                </div>
               </div>
             </div>
 

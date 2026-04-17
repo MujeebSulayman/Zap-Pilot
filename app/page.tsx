@@ -25,8 +25,22 @@ export default function PremiumMasterpiecePage() {
   const router = useRouter()
   const setUser = useAuthStore((state: AuthState) => state.setUser)
 
+  // Fetch top yields for landing page demonstration
+  const [vaults, setVaults] = useState<any[]>([])
+  const [vaultsLoading, setVaultsLoading] = useState(true)
+  
   useEffect(() => {
     setMounted(true)
+    setVaultsLoading(true)
+    fetch('/api/vaults?sortBy=apy&limit=3')
+      .then(res => res.json())
+      .then(data => {
+        console.log('Landing page vaults data:', data)
+        const items = data?.data || (Array.isArray(data) ? data : [])
+        setVaults(items)
+      })
+      .catch(err => console.error('Landing page fetch error:', err))
+      .finally(() => setVaultsLoading(false))
   }, [])
 
   // Auth Form States
@@ -55,7 +69,7 @@ export default function PremiumMasterpiecePage() {
       if (!res.ok) throw new Error(data.error || 'Authentication failed')
       
       setUser(data.user)
-      router.push('/dashboard?onboarded=true')
+      router.push('/dashboard')
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -161,6 +175,7 @@ export default function PremiumMasterpiecePage() {
             <button 
               onClick={() => { setAuthMode(authMode === 'signup' ? 'login' : 'signup'); setError('') }}
               className="text-xs font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-[0.2em] w-full text-center"
+              type="button"
             >
               {authMode === 'signup' ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
             </button>
@@ -216,22 +231,61 @@ export default function PremiumMasterpiecePage() {
                  </div>
               </div>
 
-              {/* Protocol Mini Cards */}
-              <div className="flex gap-4">
-                 <div className="flex-1 p-5 rounded-[32px] bg-slate-950 text-white space-y-3 shadow-xl">
-                    <div className="flex justify-between">
-                       <Database className="w-4 h-4 text-emerald-400" />
-                       <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Secure</span>
+              {/* Protocol Mini Cards replaced with Live Yield Feed */}
+              <div className="space-y-3">
+                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Live Yield Opportunities</p>
+                 {vaultsLoading ? (
+                    <div className="space-y-3">
+                       {[1, 2, 3].map(i => (
+                          <div key={i} className="h-20 bg-slate-50 border border-slate-100 rounded-3xl animate-pulse" />
+                       ))}
                     </div>
-                    <p className="text-sm font-black italic">Managed Infrastructure</p>
-                 </div>
-                 <div className="flex-1 p-5 rounded-[32px] border border-slate-100 bg-white space-y-3">
-                    <div className="flex justify-between">
-                       <Layers className="w-4 h-4 text-slate-950" />
-                       <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Global</span>
-                    </div>
-                    <p className="text-sm font-black italic text-slate-900">65+ Integrated Chains</p>
-                 </div>
+                 ) : vaults.length > 0 ? (
+                   vaults.map((vault, i) => {
+                     const apyValue = vault.analytics?.apy?.total || 0
+                     const apy = apyValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                     const protocol = typeof vault.protocol === 'string' ? vault.protocol : vault.protocol?.name || 'DeFi'
+                     return (
+                        <div key={vault.address} className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-100 rounded-3xl animate-fade-up" style={{ animationDelay: `${0.1 + (i * 0.1)}s` }}>
+                           <div className="relative">
+                              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center p-2 shadow-sm border border-slate-100">
+                                 <img 
+                                   src={vault.underlyingTokens?.[0]?.logoURI || `https://ui-avatars.com/api/?name=${vault.underlyingTokens?.[0]?.symbol || '?'}&background=f1f5f9&color=64748b&bold=true`} 
+                                   className="w-full h-full object-contain" 
+                                 />
+                              </div>
+                              {vault.protocol?.logoURI && (
+                                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-lg bg-white p-0.5 shadow-sm border border-slate-100">
+                                   <img 
+                                     src={vault.protocol.logoURI} 
+                                     className="w-full h-full object-contain rounded-sm" 
+                                     onError={(e) => {
+                                       const target = e.target as HTMLImageElement
+                                       if (target.src.includes('-finance')) {
+                                         target.src = target.src.replace('-finance', '')
+                                       } else {
+                                         target.style.display = 'none'
+                                       }
+                                     }}
+                                   />
+                                </div>
+                              )}
+                           </div>
+                           <div className="flex-1">
+                              <h4 className="font-black text-slate-900 text-sm truncate max-w-[140px]">{vault.name}</h4>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{protocol} • {vault.network}</p>
+                           </div>
+                           <div className="px-3 py-1.5 bg-emerald-50 text-emerald-600 font-black text-xs rounded-xl border border-emerald-100">
+                              {apy}%
+                           </div>
+                        </div>
+                     )
+                   })
+                 ) : (
+                   <div className="h-40 flex items-center justify-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-100">
+                      <p className="text-xs font-black text-slate-300 uppercase tracking-widest">Scanning liquidity pools...</p>
+                   </div>
+                 )}
               </div>
            </div>
         </div>
