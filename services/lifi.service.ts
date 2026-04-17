@@ -1,16 +1,23 @@
-const EARN_BASE_URL = 'https://earn.li.fi/v1/earn'
+const EARN_BASE_URL = 'https://earn.li.fi'
 const COMPOSER_BASE_URL = 'https://li.quest/v1'
 
 interface FetchOptions {
   method?: string
   body?: any
+  headers?: Record<string, string>
 }
 
 async function lifiFetch<T>(baseUrl: string, endpoint: string, options: FetchOptions = {}): Promise<T> {
-  const url = `${baseUrl}${endpoint}`
-  const headers: HeadersInit = {
+  // Ensure we don't end up with double slashes
+  const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
+  const url = `${cleanBase}${cleanEndpoint}`
+  
+  console.log(`[LI.FI Fetch] ${url}`) // Added for debugging
+  const headers: Record<string, string> = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
+    ...options.headers,
   }
   
   if (process.env.LIFI_API_KEY) {
@@ -21,7 +28,6 @@ async function lifiFetch<T>(baseUrl: string, endpoint: string, options: FetchOpt
     method: options.method || 'GET',
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
-    next: { revalidate: 60 * 5 } // cache for 5 minutes
   })
 
   if (!res.ok) {
@@ -32,25 +38,43 @@ async function lifiFetch<T>(baseUrl: string, endpoint: string, options: FetchOpt
   return res.json()
 }
 
-export async function getEarnVaults() {
-  return lifiFetch<any>(EARN_BASE_URL, '/vaults')
+export async function getEarnVaults(params?: {
+  chainId?: number
+  asset?: string
+  protocol?: string
+  minTvlUsd?: number
+  sortBy?: 'apy' | 'tvl'
+  limit?: number
+  cursor?: string
+}) {
+  const queryParams = new URLSearchParams()
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, value.toString())
+      }
+    })
+  }
+  
+  const endpoint = queryParams.toString() ? `/v1/vaults?${queryParams.toString()}` : '/v1/vaults'
+  return lifiFetch<any>(EARN_BASE_URL, endpoint)
 }
 
 export async function getEarnVaultByAddress(chainId: number, address: string) {
-  return lifiFetch<any>(EARN_BASE_URL, `/vaults/${chainId}/${address}`)
+  return lifiFetch<any>(EARN_BASE_URL, `/v1/vaults/${chainId}/${address}`)
 }
 
 export async function getEarnChains() {
-  return lifiFetch<any>(EARN_BASE_URL, '/chains')
+  return lifiFetch<any>(EARN_BASE_URL, '/v1/chains')
 }
 
 export async function getEarnProtocols() {
-  return lifiFetch<any>(EARN_BASE_URL, '/protocols')
+  return lifiFetch<any>(EARN_BASE_URL, '/v1/protocols')
 }
 
 // Get portfolio positions for an address
 export async function getEarnPortfolio(walletAddress: string) {
-  return lifiFetch<any>(EARN_BASE_URL, `/portfolio/${walletAddress}/positions`)
+  return lifiFetch<any>(EARN_BASE_URL, `/v1/portfolio/${walletAddress}/positions`)
 }
 
 export async function getQuoteForDeposit(
