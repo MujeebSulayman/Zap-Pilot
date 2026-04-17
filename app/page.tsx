@@ -115,13 +115,13 @@ export default function PremiumMasterpiecePage() {
             )}
             
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Access Email</label>
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
                 <input 
                   type="email" 
                   required
-                  placeholder="name@company.io"
+                  placeholder="name@company.com"
                   className="w-full bg-slate-50 border border-slate-200 focus:border-slate-900 focus:ring-4 focus:ring-slate-900/5 pl-12 pr-4 py-3.5 rounded-2xl outline-none transition-all font-bold text-slate-900 placeholder:text-slate-300 text-sm"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
@@ -131,7 +131,7 @@ export default function PremiumMasterpiecePage() {
             
             <div className="space-y-1.5">
               <div className="flex justify-between items-center ml-1">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Key</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Password</label>
                 <span className="text-[10px] font-black text-slate-400 hover:text-slate-900 cursor-pointer uppercase tracking-widest">Forgot?</span>
               </div>
               <div className="relative group">
@@ -152,7 +152,7 @@ export default function PremiumMasterpiecePage() {
               disabled={loading}
               className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 rounded-2xl transition-all disabled:opacity-70 flex items-center justify-center gap-3 text-base shadow-2xl shadow-slate-200 active:scale-[0.98] mt-2"
             >
-              {loading ? 'Authorizing...' : authMode === 'signup' ? 'Initialize Pilot' : 'Enter fleet'}
+              {loading ? 'Processing...' : authMode === 'signup' ? 'Create Account' : 'Sign In'}
               <ArrowRight className="w-5 h-5" />
             </button>
           </form>
@@ -162,7 +162,7 @@ export default function PremiumMasterpiecePage() {
               onClick={() => { setAuthMode(authMode === 'signup' ? 'login' : 'signup'); setError('') }}
               className="text-xs font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-[0.2em] w-full text-center"
             >
-              {authMode === 'signup' ? 'Existing Pilot? Sign In' : "New to the fleet? Register"}
+              {authMode === 'signup' ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
             </button>
           </div>
         </div>
@@ -239,17 +239,13 @@ export default function PremiumMasterpiecePage() {
         {/* Bottom Trust Row - Fixed to screen bottom */}
         <div className="absolute bottom-12 left-0 w-full px-20 flex items-center justify-between opacity-50 z-20">
            <div className="flex items-center gap-10">
-              <div className="flex items-center gap-3">
-                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-900">Audited Fleet</span>
-              </div>
               <div className="flex gap-6 opacity-30 grayscale">
                  <div className="w-16 h-4 bg-slate-900 rounded-sm" />
                  <div className="w-20 h-4 bg-slate-900 rounded-sm" />
               </div>
            </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Trusted by 2,000+ Capital Pilots</p>
         </div>
+
 
       </div>
 
