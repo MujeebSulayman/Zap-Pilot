@@ -98,7 +98,6 @@ export default function VaultDetailPage() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#10B981]/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
             
             <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8 relative z-10">
-              <div className="relative group">
                 <div className="w-24 h-24 rounded-3xl bg-white p-4 shadow-xl border border-slate-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
                   {vaultData?.underlyingTokens?.[0]?.logoURI ? (
                     <img 
@@ -113,24 +112,6 @@ export default function VaultDetailPage() {
                     <Layers className="w-10 h-10 text-slate-400" />
                   )}
                 </div>
-                {vaultData?.protocol?.logoURI && (
-                  <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-xl bg-white p-1.5 shadow-xl border border-slate-100 animate-in zoom-in duration-500 delay-300">
-                    <img 
-                      src={vaultData.protocol.logoURI} 
-                      alt={vaultData.protocol.name} 
-                      className="w-full h-full object-contain rounded-sm"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        if (target.src.includes('-finance')) {
-                          target.src = target.src.replace('-finance', '')
-                        } else {
-                          target.style.display = 'none'
-                        }
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="bg-slate-900 text-white px-3 py-1 text-[10px] font-black uppercase rounded-lg tracking-widest">

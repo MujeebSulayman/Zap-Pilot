@@ -169,7 +169,7 @@ export default function VaultsMarketplace() {
                 <div className="flex items-start justify-between mb-6 relative z-10">
                   <div className="flex items-center gap-4">
                     <div className="relative">
-                      <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 group-hover:scale-110 transition-transform duration-500">
+                    <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center p-2.5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 group-hover:scale-110 transition-transform duration-500">
                         <img 
                           src={assetLogo} 
                           alt={vault.name} 
@@ -178,21 +178,7 @@ export default function VaultsMarketplace() {
                             (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${symbol}&background=f1f5f9&color=64748b&bold=true`
                           }}
                         />
-                      </div>
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-lg bg-white p-1 shadow-sm border border-slate-100">
-                         <img 
-                          src={vault.protocol?.logoURI} 
-                          className="w-full h-full object-contain rounded-sm"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            if (target.src.includes('-finance')) {
-                              target.src = target.src.replace('-finance', '')
-                            } else {
-                              target.src = `https://ui-avatars.com/api/?name=${vault.protocol?.name?.charAt(0)}&background=94a3b8&color=ffffff`
-                            }
-                          }}
-                        />
-                      </div>
+                    </div>
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-900 leading-tight block max-w-[150px] truncate">{vault.name}</h3>

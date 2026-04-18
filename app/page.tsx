@@ -247,29 +247,11 @@ export default function PremiumMasterpiecePage() {
                      const protocol = typeof vault.protocol === 'string' ? vault.protocol : vault.protocol?.name || 'DeFi'
                      return (
                         <div key={vault.address} className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-100 rounded-3xl animate-fade-up" style={{ animationDelay: `${0.1 + (i * 0.1)}s` }}>
-                           <div className="relative">
-                              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center p-2 shadow-sm border border-slate-100">
+                           <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center p-2 shadow-sm border border-slate-100">
                                  <img 
                                    src={vault.underlyingTokens?.[0]?.logoURI || `https://ui-avatars.com/api/?name=${vault.underlyingTokens?.[0]?.symbol || '?'}&background=f1f5f9&color=64748b&bold=true`} 
                                    className="w-full h-full object-contain" 
                                  />
-                              </div>
-                              {vault.protocol?.logoURI && (
-                                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-lg bg-white p-0.5 shadow-sm border border-slate-100">
-                                   <img 
-                                     src={vault.protocol.logoURI} 
-                                     className="w-full h-full object-contain rounded-sm" 
-                                     onError={(e) => {
-                                       const target = e.target as HTMLImageElement
-                                       if (target.src.includes('-finance')) {
-                                         target.src = target.src.replace('-finance', '')
-                                       } else {
-                                         target.style.display = 'none'
-                                       }
-                                     }}
-                                   />
-                                </div>
-                              )}
                            </div>
                            <div className="flex-1">
                               <h4 className="font-black text-slate-900 text-sm truncate max-w-[140px]">{vault.name}</h4>
