@@ -11,7 +11,6 @@ export default function VaultsMarketplace() {
   const [selectedProtocol, setSelectedProtocol] = useState<string>('')
   const [sortBy, setSortBy] = useState<'apy' | 'tvl'>('apy')
 
-  // Fetch vaults with active filters
   const { data, isLoading, error } = useQuery({
     queryKey: ['vaults', selectedChain, selectedProtocol, sortBy],
     queryFn: async () => {
@@ -26,7 +25,6 @@ export default function VaultsMarketplace() {
     }
   })
 
-  // Fetch filter options and ensure they are arrays
   const { data: chainsData } = useQuery({ queryKey: ['chains'], queryFn: () => fetch('/api/vaults/chains').then(res => res.json()) })
   const { data: protocolsData } = useQuery({ queryKey: ['protocols'], queryFn: () => fetch('/api/vaults/protocols').then(res => res.json()) })
 
