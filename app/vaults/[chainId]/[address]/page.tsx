@@ -63,12 +63,12 @@ export default function VaultDetailPage() {
           vaultAddress: params.address,
           fromAddress: '0x0000000000000000000000000000000000000000', // Placeholder
           toAddress: '0x0000000000000000000000000000000000000000', // Placeholder
-          fromAmount: (Number(depositAmount) * 10**6).toString(), 
+          fromAmount: (Number(depositAmount) * 10 ** 6).toString(),
         })
       })
-      
+
       if (!quoteRes.ok) throw new Error('Failed to fetch executable quote')
-      
+
       // In a production app, we would now pass this quote to the Blockradar managed wallet 
       // service to sign and broadcast the transaction.
       alert('Allocation quote retrieved. In a production environment with a funded wallet, this would now execute gaslessly.')
@@ -91,27 +91,27 @@ export default function VaultDetailPage() {
       </button>
 
       <div className="flex flex-col lg:flex-row gap-8">
-        
+
         {/* Main Vault Info */}
         <div className="flex-1 space-y-6">
           <div className="glass p-8 rounded-3xl animate-fade-up border border-slate-200/50 shadow-sm relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#10B981]/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
-            
+
             <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8 relative z-10">
-                <div className="w-24 h-24 rounded-3xl bg-white p-4 shadow-xl border border-slate-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-                  {vaultData?.underlyingTokens?.[0]?.logoURI ? (
-                    <img 
-                      src={vaultData.underlyingTokens[0].logoURI} 
-                      alt="Logo" 
-                      className="w-full h-full object-contain" 
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${vaultData?.underlyingTokens?.[0]?.symbol || '?'}&background=f1f5f9&color=64748b&bold=true`
-                      }}
-                    />
-                  ) : (
-                    <Layers className="w-10 h-10 text-slate-400" />
-                  )}
-                </div>
+              <div className="w-24 h-24 rounded-3xl bg-white p-4 shadow-xl border border-slate-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                {vaultData?.underlyingTokens?.[0]?.logoURI ? (
+                  <img
+                    src={vaultData.underlyingTokens[0].logoURI}
+                    alt="Logo"
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${vaultData?.underlyingTokens?.[0]?.symbol || '?'}&background=f1f5f9&color=64748b&bold=true`
+                    }}
+                  />
+                ) : (
+                  <Layers className="w-10 h-10 text-slate-400" />
+                )}
+              </div>
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="bg-slate-900 text-white px-3 py-1 text-[10px] font-black uppercase rounded-lg tracking-widest">
@@ -168,11 +168,11 @@ export default function VaultDetailPage() {
         <div className="w-full lg:w-96 space-y-6">
           <div className="bg-white border border-slate-200 rounded-3xl p-6 text-slate-900 shadow-sm animate-fade-up" style={{ animationDelay: '0.1s' }}>
             <h3 className="font-bold text-xl mb-6">Allocate Capital</h3>
-            
+
             <div className="space-y-4 mb-8">
               <div>
                 <label className="block text-sm text-slate-500 mb-2 font-medium">Amount (NGN)</label>
-                <input 
+                <input
                   type="number"
                   placeholder="0.00"
                   className="w-full bg-slate-50 border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-slate-900 outline-none transition-all placeholder:text-slate-400"
@@ -181,13 +181,13 @@ export default function VaultDetailPage() {
                 />
               </div>
 
-              
+
               {!vaultData?.isTransactional ? (
                 <div className="p-4 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-xl text-sm leading-relaxed">
                   Direct allocation is currently disabled for this vault via Zap Pilot.
                 </div>
               ) : (
-                <button 
+                <button
                   onClick={handleDeposit}
                   disabled={allocating || !depositAmount}
                   className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
@@ -203,7 +203,7 @@ export default function VaultDetailPage() {
                 <span className="text-slate-500 font-medium text-sm flex items-center gap-1">
                   <TrendingUp className="w-4 h-4" /> Growth Simulator
                 </span>
-                <select 
+                <select
                   className="bg-slate-50 border border-slate-200 text-xs rounded px-2 py-1 outline-none text-slate-900 cursor-pointer"
                   value={simDuration}
                   onChange={(e) => setSimDuration(Number(e.target.value))}
@@ -214,7 +214,7 @@ export default function VaultDetailPage() {
                 </select>
               </div>
 
-              <button 
+              <button
                 onClick={handleSimulate}
                 disabled={!depositAmount || isSimulating}
                 className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-semibold transition-colors"
@@ -235,10 +235,10 @@ export default function VaultDetailPage() {
 
 
           <div className="glass p-5 rounded-2xl animate-fade-up" style={{ animationDelay: '0.2s' }}>
-             <p className="text-xs text-slate-500 leading-relaxed flex items-start gap-2">
-               <ShieldCheck className="w-8 h-8 text-[#10B981] shrink-0" />
-               Your allocation is executed seamlessly using LI.FI Composer directly to the vault contract. No knowledge of gas fees or bridging is required.
-             </p>
+            <p className="text-xs text-slate-500 leading-relaxed flex items-start gap-2">
+              <ShieldCheck className="w-8 h-8 text-[#10B981] shrink-0" />
+              Your allocation is executed seamlessly using LI.FI Composer directly to the vault contract. No knowledge of gas fees or bridging is required.
+            </p>
           </div>
         </div>
       </div>
