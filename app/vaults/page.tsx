@@ -37,7 +37,6 @@ export default function VaultsMarketplace() {
     if (!searchTerm) return true
     const search = searchTerm.toLowerCase()
     
-    // Safely get protocol name whether it's an object or a string
     const protocolName = typeof vault.protocol === 'string' 
       ? vault.protocol 
       : vault.protocol?.name || ''
@@ -49,7 +48,6 @@ export default function VaultsMarketplace() {
     )
   })
 
-  // Debug log to help identify the data structure in your browser console
   if (data) console.log('Current Vaults Data:', data)
 
   return (
