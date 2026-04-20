@@ -74,7 +74,6 @@ export default function VaultsMarketplace() {
           </div>
         </div>
 
-        {/* Filters and Sort */}
         <div className="flex flex-wrap items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
           <div className="flex items-center gap-2">
             <Filter className="w-5 h-5 text-slate-400" />
